@@ -1,0 +1,180 @@
+<%- contentFor('body') %>
+<div class="container" style="margin-top: 5em;">
+    <h3><a href="/admin">Administrador</a> /  Produtos</h3>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Marcas</th>
+                    <th>Preço</th>
+                    <th>Imagem Dash</th>
+                   
+                   
+                    
+                    <th> </th>
+                   
+
+                </tr>
+            </thead>
+            <tbody>
+                    <% for(d of data){ %>
+                        <tr>
+                            <td><%- d.produto %></td>
+                            <td><%- d.marca.marca %></td>
+                            <td><%- d.preco %></td>
+                           <td><button type="button" data-button="<%- d._id %>" data-toggle="modal" data-target="#modalDash"><img src="default" data-dash="<%- d._id %>" style="height: 2em; width:auto;"></button></td>
+                            <td><a class="btn btn-primary" href="/edit_produto?id=<%- d._id %>" ><i class="material-icons">edit</i></a></td>
+                            <td><button class="btn btn-danger" data-delete="/delete_produto/<%- d._id %>" data-toggle="modal" data-target="#modalDialog"><i class="material-icons">delete</i></button></td>
+                            
+                        </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+    
+
+</div>
+<div class="fixed-bottom">
+        <div class=" float-right">
+        
+            <button class="btn btn-info bmd-btn-fab" id="add">
+                <i class="material-icons">add</i>
+            </button>
+        
+        </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalDialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Excluindo Informções</h5>
+
+            </div>
+            <div class="modal-body">
+                <p>Deseja realmente excluir essa informação?</p>
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" class="btn  btn-primary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" id="excluir">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modalDash">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Escolha a imagem principal para o Dash Board</h5>
+
+            </div>
+            <div class="modal-body" >
+                <form method="POST" name="imagens" id="imagens" action="/save_dash">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Imagem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalBodyDash">
+
+                    </tbody>
+                </table>
+            
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" class="btn  btn-primary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-secondary" id="saveDash">Salvar</button>
+            </div>
+
+        </div>
+    </form>
+    </div>
+</div>
+
+
+
+<script>
+    const add=document.getElementById('add');
+   const del=document.querySelectorAll('[data-delete]');
+   const btnExcluir=document.getElementById('excluir')
+   const imgDash=document.querySelectorAll('[data-dash]');
+   const btnDash=document.querySelectorAll('[data-button]');
+   const  modalBodyDash=document.getElementById('modalBodyDash');
+   //const sanveDash=document.getElementById('sanveDash');
+   const form=document.getElementById('imagens')
+
+    imgDash.forEach((f)=>{
+        fetch(`/dash_view/${f.dataset.dash}`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            },
+        }).then(response=>{
+            return response.json();
+        }).then(dash=>{
+            dash.map((data)=>{
+                f.src=data.url;
+                console.log(data);
+            })
+        })
+    })
+
+    btnDash.forEach((btn)=>{
+        btn.addEventListener('click',()=>{
+
+            modalBodyDash.innerHTML='';
+            fetch(`/list_imagens/${btn.dataset.button}`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            },
+        }).then(response=>{
+            return response.json();
+        }).then(dash=>{
+            dash.map((data)=>{
+                //let tr=document.createElement('tr')
+                let list=`<tr><td><input type="radio" name="imagemgrupo" id="imagemgrupo" value="${data._id}"></td>
+                <td><img src="${data.url}" style="height:3em;width:auto;" ></td></tr>`;
+
+               // tr.innerHTML=list
+                
+                modalBodyDash.innerHTML +=list;
+
+            })
+
+
+        })
+
+            
+
+        })
+    })
+
+   
+    add.addEventListener('click',()=>{
+        document.location.href="/add_produto"
+    })
+
+    del.forEach((f)=>{
+        f.addEventListener('click',()=>{
+            let url=f.dataset.delete;
+            
+            btnExcluir.addEventListener('click',()=>{
+                document.location.href=url;
+            })
+            
+        })
+    })
+    
+
+
+   
+
+
+</script>

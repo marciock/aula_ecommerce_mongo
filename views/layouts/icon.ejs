@@ -1,0 +1,15 @@
+
+<div class="row" style="margin-top:2em;">
+        
+
+        <% for (menu of menus){ %>
+        <div class="col" >
+            <div class="text-center">
+                <a href="<%= menu.url %>" >
+                    <img src="<%= menu.icon %>" style="width: 128px;height: auto;" >
+                    <h5 style="margin-top:0" > <%=  menu.title %></h5>
+                </a>
+            </div>
+        </div>
+    <% } %>
+    </div>

@@ -1,0 +1,98 @@
+<%- contentFor('body') %>
+
+
+<div class="container">
+    <h3>Adicionar Imagens</h3>
+   
+        <form id="form" method="POST" action="/save_imagem" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="produto">Produto</label>
+                <select name="produto" id="produto" class="form-control"> 
+                    <option value="0">Produto</option>
+                </select>
+
+            </div>
+            
+        
+            
+            <div style="border: dashed 1pt gray; height: 15em;" id="view-image" class="row">
+
+            </div>
+
+          <div class="form-group" style="margin-top: 2em;">
+            <button type="button" id="cancelar" class="btn btn-raised btn-danger">Cancelar</button>
+            <button type="submit" class="btn btn-raised btn-success">Salvar</button>
+            
+        </div>
+        </form>
+    
+    
+</div>
+<script>
+  
+    const viewImage=document.getElementById('view-image');
+   // const formData=new FormData();
+    const produto=document.getElementById('produto');
+    
+    for(let i=1;i<6; i++){
+       
+       const div=document.createElement('div');
+       const file=document.createElement('input');
+       const img=document.createElement('img');
+       const label=document.createElement('label')
+
+        file.name=`file${i}`;
+        file.id=`file${i}`;
+
+
+
+       file.type='file';
+       file.classList.add('btn', 'btn-outline-primary')
+      
+       file.style='height:2em;width:3em;display:inline-block;opacity:0';
+        div.style='border: dashed 1pt gray;height:12em;width:auto; margin-left:1em;margin-right:1em; margin-top:1em;'
+        div.classList.add('col-sm')
+        label.innerHTML=`<i class="material-icons">backup</i>`;
+        
+        label.appendChild(file);
+       
+       div.appendChild(label);
+       div.appendChild(img);
+
+       viewImage.appendChild(div)
+
+       file.addEventListener('change',()=>{
+           let url=window.URL.createObjectURL(file.files[0]);
+           img.src=url;
+           img.style='height:6em;width:auto;padding:5px;'
+       })
+       
+               
+    }
+
+        
+        
+
+            fetch('/select_produto',{
+             method:'GET',
+             headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+                }
+            }).then(response=>{
+                    return response.json();
+                }).then(data=>{
+                    data.map((f)=>{
+                        let option=`<option value="${f._id}">${f.produto} -  ${f.marca.marca}</option>`;
+                        produto.innerHTML +=option;
+                })
+        })
+    
+   
+
+   
+
+</script>
+
+
+
+

@@ -1,0 +1,55 @@
+<%- contentFor('body') %>
+<div class="container" style="margin-top: 5em;">
+    <h3><a href="/produtos">Produtos</a> / Adicionar Novo Produto</h3>
+    <div class="row">
+        <form  method="POST" action="/update_produto" class="col-lg-10">
+        <% for(d of data) { %>
+            <div class="form-group">
+                <label for="produto">Produto</label>
+                <input type="text" name="produto" id="produto" class="form-control" value="<%- d.produto %>" >  
+                <input type="hidden" name="id" id="id" class="form-control" value="<%- d._id %>" >                   
+            </div>
+            <div class="form-group">
+                <label for="marca">Marca</label>
+                <select name="marca" id="marca" class="form-control"> 
+                    <option value="<%- d.marca._id %>"><%- d.marca.marca %></option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                 <textarea name="descricao" id="descricao" class="form-control" rows="3"><%- d.descricao %></textarea>                
+            </div>
+            <div class="form-group">
+                <label for="preco">Preço</label>
+                 <input type="number" name="preco" id="preco" class="form-control" step="any" value="<%- d.preco %>" >
+                    
+        <% } %>
+       
+            <div class="form-group">
+                <button type="button" id="cancelar" class="btn btn-raised btn-danger">Cancelar</button>
+                <button type="submit" class="btn btn-raised btn-success">Salvar</button>
+                
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    const marca=document.getElementById('marca');
+
+        fetch('/select_marca',{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            }
+        }).then(response=>{
+            return response.json();
+        }).then(data=>{
+            data.map((f)=>{
+                let option=`<option value="${f._id}">${f.marca}</option>`;
+                marca.innerHTML +=option;
+            })
+        })
+
+</script>
