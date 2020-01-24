@@ -26,14 +26,17 @@ const saveProdutosRouter=require('./routes/produto/save');
 const editProdutoRouter=require('./routes/produto/edit');
 const updateProdutoRouter=require('./routes/produto/update');
 const deleteProdutoRouter=require('./routes/produto/delete');
-const selectProdutoRouter=require('./routes/produto/select')
+const selectProdutoRouter=require('./routes/produto/select');
+const saveDashRouter=require('./routes/produto/savedash');
+const showDashRouter=require('./routes/produto/dash');
+const detalheRouter=require('./routes/produto/detalhe');
 
 const imagensViewRouter=require('./routes/imagem/index');
 const addImagensRouter=require('./routes/imagem/add');
 const saveImagensRouter=require('./routes/imagem/save');
 const dashImagensRouter=require('./routes/imagem/dashview');
 const listImagensRouter=require('./routes/imagem/listimagens');
-const saveDashRouter=require('./routes/imagem/savedash')
+
 
 
 const app = express();
@@ -72,6 +75,8 @@ app.use('/edit_produto',editProdutoRouter);
 app.use('/update_produto',updateProdutoRouter);
 app.use('/delete_produto',deleteProdutoRouter);
 app.use('/select_produto',selectProdutoRouter);
+app.use('/dash',showDashRouter);
+app.use('/detalhe',detalheRouter);
 
 app.use('/imagens',imagensViewRouter);
 app.use('/add_imagem',addImagensRouter);

@@ -17,9 +17,9 @@ module.exports={
         })
      },
      dashView:(req,res)=>{
-            let produto=req.params.id;
+            let imagem=req.params.id;
 
-        imagens.find({'produto':produto,'ativo':'true','dash':'true'}).then((results)=>{
+        imagens.find({'_id':imagem,'ativo':'true'}).then((results)=>{
             res.json(results);
         })
      },
@@ -42,7 +42,6 @@ module.exports={
                 produto:req.body.produto,
                 url:newPath.replace('public',''),
                 creation:Date(),
-                dash:'false',
                 ativo:'true'
             });
             newImagem.save((err,ata)=>{
@@ -59,61 +58,6 @@ module.exports={
         res.redirect('/imagens');
            
     },
-    saveDash:(req,res)=>{
-        
-
-        let id=req.body.imagemgrupo;
-      
-       imagens.findOne({'dash':'true'},(err,data)=>{
-
-       
-
-
-            data.dash='false' ? 'false':data.dash;
-            data.save((err,data)=>{
-                
-
-
-               // res.redirect('/produtos');
-                //return data;
-            })
-
-            //res.json(data)
-        })
-
-        imagens.findOne({'_id':id},(err,data)=>{
-
-            if(err){
-                return res.status(500).json({
-                    message:'Erro ao buscar o arquivo',
-                    error:err
-                })
-            }
-            if(!data){
-                return res.status(404).json({
-                    message:'Não existente'
-                })
-            }
     
-    
-                data.dash='true' ? 'true':data.dash;
-                data.save((err,data)=>{
-                    
-    
-    
-                    res.redirect('/produtos');
-                    //return data;
-
-                    //res.json(data)  
-                })
-    
-                
-            })
-
-        
-
-       
-        
-    }
 
 }

@@ -8,7 +8,6 @@ let imagemSchema=new mongoose.Schema({
     produto:{type:mongoose.Schema.Types.ObjectId,ref:'Produtos'},
     url:{type:String},
     creation:{type:Date},
-    dash:{type:Boolean},
     ativo:{type:Boolean}
 })
 

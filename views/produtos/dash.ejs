@@ -1,0 +1,47 @@
+<%- contentFor('body') %>
+
+<div class="container">
+    <div class="row" id="content">
+
+        <% for(d of data){ %>
+        <div class="col-sm-3  m-4">
+            <div class="card" >
+              <img src="" class="card-img-top" alt="..." data-img="<%- d.imagem %>">
+              <div class="card-body">
+                <h5 class="card-title"><strong><%- d.produto %></strong></h5>
+                <p class="card-text"><strong><%- d.marca.marca %></strong></p>
+                <p class="card-text"><strong><%- d.preco %></strong></p>
+                <a href="/detalhe?id=<%- d._id %>" class="btn btn-primary">Adicione ao Carrinho</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+
+    </div>
+    
+</div>
+      
+</div>
+<script>
+
+    const imgDash=document.querySelectorAll('[data-img]');
+
+    imgDash.forEach((f)=>{
+        console.log(f.dataset.img)
+        fetch(`/dash_view/${f.dataset.img}`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            },
+        }).then(response=>{
+            return response.json();
+        }).then(dash=>{
+            dash.map((data)=>{
+                f.src=data.url;
+                console.log(data);
+            })
+        })
+    })
+
+</script>
+

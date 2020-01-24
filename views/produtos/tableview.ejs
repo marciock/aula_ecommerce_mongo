@@ -23,7 +23,8 @@
                             <td><%- d.produto %></td>
                             <td><%- d.marca.marca %></td>
                             <td><%- d.preco %></td>
-                           <td><button type="button" data-button="<%- d._id %>" data-toggle="modal" data-target="#modalDash"><img src="default" data-dash="<%- d._id %>" style="height: 2em; width:auto;"></button></td>
+                            <td><%- d.imagem %></td>
+                           <td><button type="button" data-button="<%- d._id %>" data-toggle="modal" data-target="#modalDash"><img src="default" data-dash="<%- d.imagem %>" style="height: 2em; width:auto;" ></button></td>
                             <td><a class="btn btn-primary" href="/edit_produto?id=<%- d._id %>" ><i class="material-icons">edit</i></a></td>
                             <td><button class="btn btn-danger" data-delete="/delete_produto/<%- d._id %>" data-toggle="modal" data-target="#modalDialog"><i class="material-icons">delete</i></button></td>
                             
@@ -73,6 +74,9 @@
             </div>
             <div class="modal-body" >
                 <form method="POST" name="imagens" id="imagens" action="/save_dash">
+                <div id='id-produto'>
+
+                </div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -106,10 +110,13 @@
    const imgDash=document.querySelectorAll('[data-dash]');
    const btnDash=document.querySelectorAll('[data-button]');
    const  modalBodyDash=document.getElementById('modalBodyDash');
-   //const sanveDash=document.getElementById('sanveDash');
-   const form=document.getElementById('imagens')
+   const idProduto=document.getElementById('id-produto');
+   const form=document.getElementById('imagens');
+
+   
 
     imgDash.forEach((f)=>{
+        console.log(f.dataset.dash)
         fetch(`/dash_view/${f.dataset.dash}`,{
             method:'GET',
             headers:{
@@ -127,6 +134,9 @@
 
     btnDash.forEach((btn)=>{
         btn.addEventListener('click',()=>{
+
+            // inner hidden form with value of product id for request into find controller produtos/savedash
+            idProduto.innerHTML=`<input type="hidden" name="id_produto" id="id_produto" value="${btn.dataset.button}">`;
 
             modalBodyDash.innerHTML='';
             fetch(`/list_imagens/${btn.dataset.button}`,{
@@ -154,9 +164,11 @@
             
 
         })
+        
     })
 
-   
+    
+
     add.addEventListener('click',()=>{
         document.location.href="/add_produto"
     })

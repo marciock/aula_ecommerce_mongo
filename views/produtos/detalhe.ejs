@@ -1,0 +1,89 @@
+<%- contentFor('body') %>
+
+<div class="container">
+    <% for (d of data) {%>
+    <div class="row mt-5">
+          <div class="col">
+              <div class="row border" id="img-view" data-img="<%- d.imagem %>"></div>
+              <div class="row" id="img-min" data-min="<%- d._id %>"></div>
+          </div>
+          <div class="col" id="description">
+            <div class="ml-auto">
+                <h2 class="text-center mb-5 mt-2"><%- d.produto %> 
+                    Marca - <%- d.marca.marca %>  </h2>
+                <h4 class="text-justify"><%- d.descricao %> </h4>
+                <h4 class="mt-5">
+                    <strong>Valor: <%- d.preco %> </strong></h4>
+            </div>
+          </div>
+        
+    </div>
+    <% } %>
+
+
+  </div>
+  <script>
+        const imgView=document.getElementById('img-view');
+        const imgMin=document.getElementById('img-min');
+
+        console.log(imgView.dataset.img)
+
+
+    fetch(`/dash_view/${imgView.dataset.img}`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            }
+        }).then(response=>{
+            return response.json();
+        }).then(data=>{
+            data.map((f)=>{
+                let img=`<img src="${f.url}">`;
+                
+                imgView.innerHTML =img;
+            })
+        })
+
+        fetch(`/list_imagens/${imgMin.dataset.min}`,{
+            method:'GET',
+            headers:{
+                'Content-Type':'text/plain;charset=UTF-8'
+            }
+        }).then(response=>{
+            return response.json();
+        }).then(data=>{
+            data.map((f)=>{
+                let min=`
+                <div class="col border">
+                    <a href="" data-id="${f._id}">
+                        <img src="${f.url}" 
+                        style="width:64px;height:auto;
+                        margin-left:25%;">
+                    </a>
+                </div>
+
+            `;
+            imgMin.innerHTML +=min;
+
+            const imgButtons=document.querySelectorAll('[data-id]');
+            imgButtons.forEach((m)=>{
+            m.addEventListener('mouseover',()=>{
+                let url=m.childNodes[1].src
+               // console.log(m.childNodes[1].src)
+                
+                let myImage=`<img src="${url}">`;
+                
+                imgView.innerHTML=myImage;
+            })
+
+           
+        })
+
+            }).join('')
+        })
+    
+       
+
+     
+     
+  </script>

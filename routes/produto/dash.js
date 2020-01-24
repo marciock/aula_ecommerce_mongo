@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const imagens=require('../../controllers/imagens')
+const produtos=require('../../controllers/produtos')
 
 /* GET users listing. */
-router.post('/',imagens.saveDash)
-
+router.get('/', produtos.showDash);
 
 module.exports = router;
